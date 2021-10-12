@@ -1,40 +1,30 @@
 from sys import argv
 from os.path import isfile
+from string import printable as CHARS
 
 
-characters = [
-    ' ', ',', '.', ';', ':', '?', '!', '/', '"', "'", '(',
-    ')', '[', ']', '{', '}', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 
-    'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 
-    'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
-    'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', 
-    '3', '4', '5', '6', '7', '8', '9'
-    ]
+def main():
+    if len(argv) != 2:
+        print("Invalid arguments.\npython3 " + argv[0] + " binary.exe")
+        return 1
+    
+    if not isfile(argv[1]):
+        print("Invalid file path passed.")
+        return 1
 
+    with open(argv[1], 'r', encoding="cp437") as stream:
+        content = stream.read()
+    stream.close()
 
-if len(argv) < 2:
-    print("Not enough arguments-")
-    exit()
+    output = ""
+    for char in content:
+        if char in CHARS:
+            output += char
+    
+    with open('.'.join(argv[1].split('.')[0:-1]) + '.out', 'w+') as stream:
+        stream.write(output)
+    stream.close()
+    return 0
 
-if len(argv) > 2:
-    print("Too much arguments-")
-    exit()
-
-
-if not isfile(argv[1]):
-    print("Not a file-")
-    exit()
-
-with open(argv[1], 'r', encoding="cp437") as f:
-    content = (f.read()).splitlines()
-
-for line in content:
-    show = False
-    for char in line:
-        if char in characters:
-            print(char, end='')
-            show = True
-    if not show:
-        print()
-
-
+if __name__ == "__main__":
+    main()
